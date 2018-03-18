@@ -24,13 +24,13 @@ class Post(models.Model):
         return self.title
 
 
-class Entry(models.Model):
-    blog = models.EmbeddedModelField(
-        model_container=Post,
-    )
-    headline = models.CharField(max_length=255)
-
-    objects = models.DjongoManager()
+# class Entry(models.Model):
+#     blog = models.EmbeddedModelField(
+#         model_container=Post,
+#     )
+#     headline = models.CharField(max_length=255)
+#
+#     objects = models.DjongoManager()
 
 
 class EntryPost(Post):
