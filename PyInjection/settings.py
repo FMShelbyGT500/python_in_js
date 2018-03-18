@@ -84,6 +84,9 @@ DATABASES = {
       'PORT': 13169,
       'USER': 'admin',
       'PASSWORD': 'admin123',
+      'AUTH_SOURCE': 'heroku_2bdlnxm6',
+      'ENFORCE_SCHEMA': True,
+      'AUTH_MECHANISM': 'SCRAM-SHA-1',
    }
 }
 
