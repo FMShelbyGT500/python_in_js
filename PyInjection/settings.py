@@ -79,7 +79,11 @@ WSGI_APPLICATION = 'PyInjection.wsgi.application'
 DATABASES = {
    'default': {
       'ENGINE': 'djongo',
-      'NAME': 'heroku_2bdlnxm6'
+      'NAME': 'heroku_2bdlnxm6',
+      'HOST': 'ds113169.mlab.com',
+      'PORT': 13169,
+      'USER': 'admin',
+      'PASSWORD': 'admin123',
    }
 }
 

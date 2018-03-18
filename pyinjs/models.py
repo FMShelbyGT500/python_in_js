@@ -1,6 +1,6 @@
 from djongo import models
 from django.utils import timezone
-# from mongoengine import *
+from mongoengine import *
 # from PyInjection.settings import DBNAME
 from django.conf import settings
 
