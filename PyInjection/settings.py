@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'PyInjection.wsgi.application'
 DATABASES = {
    'default': {
       'ENGINE': 'djongo',
-      'NAME': 'mongodb://admin:admin123@ds113169.mlab.com:13169/heroku_2bdlnxm6'
+      'NAME': 'heroku_2bdlnxm6'
    }
 }
 
