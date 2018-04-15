@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Handling</title>
+</head>
+<body>
+    <form action="{% url 'pyinjs:handling_post_request' %}" method='post'>
+{#        {% csrf_token %}#}
+        {{ form.as_p }}
+        <button name="submit">add topic</button>
+{#        <h1>{{ script }}</h1>#}
+    </form>
+    <h1>{{ script }}</h1>
+</body>
+</html>

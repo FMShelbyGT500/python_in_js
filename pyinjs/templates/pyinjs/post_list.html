@@ -1,24 +1,26 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Document</title>
+	<title>Pyinjs</title>
+    <style>
+      p { color:  orangered;
+          margin-top: 0;
+          margin-left: 50px;
+          font-size: 20pt;
+      }
+    </style>
 </head>
-<body>
-    <div>
-            <h1><a href="/">Django Girls Blog</a></h1>
-        </div>
-
-        <div>
-            <p>published: 14.06.2014, 12:14</p>
-            <h2><a href="">My first post</a></h2>
-            <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-        </div>
-
-        <div>
-            <p>published: 14.06.2014, 12:14</p>
-            <h2><a href="">My second post</a></h2>
-            <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut f.</p>
-        </div>
+<body bgcolor=#C8F2EC>
+    <h1>Hi there</h1>
+    <p><b>Lorem</b></p>
+    <p>Add a new topic:</p>
+    <form action="{% url 'pyinjs:post_list' %}" method='post'>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button name="submit">add topic</button>
+    </form>
+    <h1>{{ text }}</h1>
 </body>
 </html>
