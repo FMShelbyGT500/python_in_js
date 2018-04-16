@@ -1,15 +1,13 @@
-from django.shortcuts import render, render_to_response, get_object_or_404, redirect
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpRequest
-from django.views.generic import TemplateView
-from .models import Post
+from django.shortcuts import render as __render
+from django.http import HttpResponseRedirect, JsonResponse
 from .forms import PostForm
-from .forms import SimpleForm
-from django.urls import reverse
+from django.urls import reverse as __reverse
 import json
-from django.utils import timezone
-from django.core import serializers
+import numpy
+from networkx import Graph
 
-data = None
+
+result = 888
 
 
 # Не важно
@@ -26,28 +24,48 @@ def post_list(request):
         if form.is_valid():
             form.save()
             text = form.cleaned_data['content']
-            return HttpResponseRedirect(reverse('pyinjs:post_list'))
+            return HttpResponseRedirect(__reverse('pyinjs:post_list'))
     context = {'form': form, 'text': text}
-    return render(request, 'pyinjs/post_list.html', context)
+    return __render(request, 'pyinjs/post_list.html', context)
 # Конец не важно
 
 
 # ================= То что нужно ============================================================
 def hpr(request):
+    global result
     if request.method == 'POST':
         received_json_data = json.loads(request.body)
         script = received_json_data["script"]
+        state = received_json_data["state"]
 
-        exec(script)
-        result = eval('f(4)')
+        state_keys = list(state.keys())
+        state_values = list(state.values())
 
-        return JsonResponse({"script": script, "result": str(result)}, safe=False)
+        for i in range(len(state_keys)):
+            state_keys[i] = 'scope_'+state_keys[i]+' = '+str(state_values[i])
+
+        variables = '\n'.join(state_keys)
+
+        taboos = ['__render', 'HttpResponseRedirect', 'JsonResponse', 'PostForm', '__reverse', 'Graph', 'import']
+        flag = True
+
+        for taboo in taboos:
+            if taboo in script or taboo in variables:
+                flag = False
+                break
+
+        if flag:
+            exec(variables, globals())
+            exec(script, globals())
+        else:
+            script = None
+            variables = None
+            result = "NameError: using unavailable expression"
+
+        return JsonResponse({"script": script, "result_variables": variables, "result": result, }, safe=False)
     else:
-        return render(request, 'pyinjs/handling_post_request.html')
+        return __render(request, 'pyinjs/handling_post_request.html')
 ###############################################################################################
 
 # Create your views here.
-# def post_list(request):
-#     return render(request, 'templates/post_list.html')
-
 
