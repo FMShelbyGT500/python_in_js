@@ -1,13 +1,14 @@
 from django.shortcuts import render as __render
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponseBadRequest
 from .forms import PostForm
 from django.urls import reverse as __reverse
 import json
+
+# Библиотеки для приходящего кода
 import numpy
-from networkx import Graph
 
 
-result = 888
+result = 888  # глобальная переменная для сохранения в нее результата
 
 
 # Не важно
@@ -46,7 +47,15 @@ def hpr(request):
 
         variables = '\n'.join(state_keys)
 
-        taboos = ['__render', 'HttpResponseRedirect', 'JsonResponse', 'PostForm', '__reverse', 'Graph', 'import']
+        # запрещенные библиотеки и оператор import для запрета импортирования модулей внутри
+        taboos = ['__render',
+                  'HttpResponseRedirect',
+                  'JsonResponse',
+                  'PostForm',
+                  '__reverse',
+                  'import',
+                  'stderr',
+                  'HttpResponseBadRequest']
         flag = True
 
         for taboo in taboos:
@@ -54,15 +63,58 @@ def hpr(request):
                 flag = False
                 break
 
+        exception_flag = False
+
         if flag:
-            exec(variables, globals())
-            exec(script, globals())
+            ''' Выполнение кода, если не исползуется ничего из taboos '''
+            try:
+                exec(variables, globals())
+                exec(script, globals())
+                state['result'] = result
+            except ValueError:
+                status = '400: Bad Request'
+                result = 'ValueError'
+                response = HttpResponseBadRequest(result, status=400)
+                response.__setitem__(header='status', value=status)
+                return response
+            except SyntaxError:
+                status = '400: Bad Request'
+                result = 'SyntaxError'
+                response = HttpResponseBadRequest(result, status=400)
+                response.__setitem__(header='status', value=status)
+                return response
+            except NameError:
+                status = '400: Bad Request'
+                result = 'NameError'
+                response = HttpResponseBadRequest(result, status=400)
+                response.__setitem__(header='status', value=status)
+                return response
+            except ZeroDivisionError:
+                status = '400: Bad Request'
+                result = 'ZeroDivisionError'
+                response = HttpResponseBadRequest(result, status=400)
+                response.__setitem__(header='status', value=status)
+                return response
+            except MemoryError:
+                status = '400: Bad Request'
+                result = 'MemoryError'
+                response = HttpResponseBadRequest(result, status=400)
+                response.__setitem__(header='status', value=status)
+                return response
+            except ModuleNotFoundError:
+                status = '400: Bad Request'
+                result = 'ModuleNotFoundError'
+                response = HttpResponseBadRequest(result, status=400)
+                response.__setitem__(header='status', value=status)
+                return response
+
         else:
             script = None
             variables = None
-            result = "NameError: using unavailable expression"
+            result = "AcceptError: using unavailable expression"
+            state['result'] = result
 
-        return JsonResponse({"script": script, "result_variables": variables, "result": result, }, safe=False)
+        return JsonResponse({"script": script, "result_variables": variables, "state": state, }, safe=False)
     else:
         return __render(request, 'pyinjs/handling_post_request.html')
 ###############################################################################################
