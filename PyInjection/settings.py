@@ -25,8 +25,8 @@ SECRET_KEY = '!es2(+bnt3x$yc&%v@j6!jg9)j8n@f($op-(%l91ac1u5jse^a'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = ['127.0.0.1', 'python-in-js.herokuapp.com']
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'python-in-js.herokuapp.com']
+# ALLOWED_HOSTS = []
 
 
 # Application definition
